@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>476</width>
-    <height>338</height>
+    <width>737</width>
+    <height>331</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="addNodeButton">
     <property name="geometry">
      <rect>
       <x>320</x>
@@ -40,7 +40,7 @@
      <string>Create File</string>
     </property>
    </widget>
-   <widget class="QTableView" name="tableView">
+   <widget class="QTableView" name="nodeView">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -50,13 +50,36 @@
      </rect>
     </property>
    </widget>
+   <widget class="QTableView" name="elementView">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>30</y>
+      <width>256</width>
+      <height>192</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="addElementButton">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>100</y>
+      <width>80</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Add Element</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>476</width>
+     <width>737</width>
      <height>20</height>
     </rect>
    </property>

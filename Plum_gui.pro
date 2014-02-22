@@ -16,9 +16,11 @@ CONFIG += c++11
 
 SOURCES += main.cpp\
         MainWindow.cpp \
-    NodesModel.cpp
+    NodesModel.cpp \
+    ElementsModel.cpp
 
 HEADERS  += MainWindow.hpp \
-    NodesModel.hpp
+    NodesModel.hpp \
+    ElementsModel.hpp
 
 FORMS    += mainwindow.ui

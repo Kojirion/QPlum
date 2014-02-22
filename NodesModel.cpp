@@ -86,7 +86,6 @@ bool NodesModel::setData(const QModelIndex &index, const QVariant &value, int ro
 Qt::ItemFlags NodesModel::flags(const QModelIndex &index) const
 {
     return Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsSelectable;
-    //return Qt::ItemIsEnabled | Qt::ItemIsEditable;
 }
 
 void NodesModel::appendRow()
@@ -98,13 +97,9 @@ void NodesModel::appendRow()
 
 void NodesModel::createFile() const
 {
-    //auto nr_rows = rowCount();
-    //auto nr_cols = ui->tableWidget->columnCount();
-
     std::ofstream file("a.out");
 
     for (int i=0; i<nodes.size(); ++i) {
         file << i << " " << nodes[i].x << " " << nodes[i].y << std::endl;
-        //file << i << " " << ui->tableWidget->row << " " << ui->tableWidget->
     }
 }
