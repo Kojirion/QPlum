@@ -14,10 +14,6 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-
-public slots:
-    void addRow();
-    void prepareFile();
     
 private:
     Ui::MainWindow *ui;

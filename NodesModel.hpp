@@ -29,6 +29,7 @@ signals:
     
 public slots:
     void appendRow();
+    void createFile() const;
 
 private:
     QList<Node> nodes;

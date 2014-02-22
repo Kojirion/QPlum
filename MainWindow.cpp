@@ -11,7 +11,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     auto nodesModel = new NodesModel; //parent?
     ui->tableView->setModel(nodesModel);
-    connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(addRow()));
+    connect(ui->pushButton, SIGNAL(clicked()), nodesModel, SLOT(appendRow()));
+    connect(ui->pushButton_2, SIGNAL(clicked()), nodesModel, SLOT(createFile()));
 }
 
 MainWindow::~MainWindow()

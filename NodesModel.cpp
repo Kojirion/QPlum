@@ -1,4 +1,5 @@
 #include "NodesModel.hpp"
+#include <fstream>
 
 NodesModel::NodesModel(QObject *parent) :
     QAbstractTableModel(parent)
@@ -93,4 +94,17 @@ void NodesModel::appendRow()
     emit beginInsertRows(QModelIndex(), nodes.size(), nodes.size());
     nodes.append(Node{0., 0.});
     emit endInsertRows();
+}
+
+void NodesModel::createFile() const
+{
+    //auto nr_rows = rowCount();
+    //auto nr_cols = ui->tableWidget->columnCount();
+
+    std::ofstream file("a.out");
+
+    for (int i=0; i<nodes.size(); ++i) {
+        file << i << " " << nodes[i].x << " " << nodes[i].y << std::endl;
+        //file << i << " " << ui->tableWidget->row << " " << ui->tableWidget->
+    }
 }
