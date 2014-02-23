@@ -28,8 +28,13 @@ MainWindow::~MainWindow()
 
 void MainWindow::createAnalysisFile() const
 {
-    std::ofstream file("a.out");
+    std::ofstream file("data.txt");
+    file << "DOF  DX  DY  ROTZ" << std::endl
+           << "NEL " << elementsModel->rowCount() << std::endl
+           << "NNOD " << nodesModel->rowCount() << std::endl;
+
     nodesModel->saveTo(file);
-    file << std::endl;
     elementsModel->saveTo(file);
+    nodesModel->saveFixesLoadsTo(file);
+    file << "A" << std::endl;
 }

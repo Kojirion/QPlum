@@ -3,26 +3,10 @@
 
 #include <QAbstractTableModel>
 #include <fstream>
-#include <boost/optional.hpp>
-
-struct OptionalVector {
-    boost::optional<double> x, y, z;
-};
-
-struct Vector {
-    double x,y,z;
-};
 
 struct Element {
-
-    Element(unsigned int node_1, unsigned int node_2, double youngsModulus, double area, double area_2);
-
-    unsigned int node_1, node_2;
-    double youngsModulus, area, area_2;
-
-
-    OptionalVector fixity;
-    Vector load;
+    unsigned int type, node_1, node_2;
+    double youngsModulus, area, area_2;   
 };
 
 std::ostream& operator<<(std::ostream& stream, const Element& element);
@@ -33,8 +17,8 @@ class ElementsModel : public QAbstractTableModel
 public:
     explicit ElementsModel(QObject *parent = 0);
 
-    int rowCount(const QModelIndex &parent) const;
-    int columnCount(const QModelIndex &parent) const;
+    int rowCount(const QModelIndex & parent = QModelIndex()) const;
+    int columnCount(const QModelIndex & parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role);
