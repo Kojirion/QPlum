@@ -2,6 +2,7 @@
 #define NODESMODEL_HPP
 #include <QAbstractTableModel>
 #include <QList>
+#include <fstream>
 
 struct Node {
     double x,y;
@@ -23,13 +24,13 @@ public:
 
     bool setData(const QModelIndex &index, const QVariant &value, int role);
     Qt::ItemFlags flags(const QModelIndex &index) const;
+    void saveTo(std::ofstream& stream) const;
 
 
 signals:
     
 public slots:
     void appendRow();
-    void createFile() const;
 
 private:
     QList<Node> nodes;

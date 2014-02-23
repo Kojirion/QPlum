@@ -1,5 +1,4 @@
 #include "NodesModel.hpp"
-#include <fstream>
 
 NodesModel::NodesModel(QObject *parent) :
     QAbstractTableModel(parent)
@@ -95,11 +94,15 @@ void NodesModel::appendRow()
     emit endInsertRows();
 }
 
-void NodesModel::createFile() const
+void NodesModel::saveTo(std::ofstream &stream) const
 {
-    std::ofstream file("a.out");
+    for (int i=0; i<nodes.size(); ++i)
+        stream << "N " << nodes[i] << std::endl;
+}
 
-    for (int i=0; i<nodes.size(); ++i) {
-        file << i << " " << nodes[i].x << " " << nodes[i].y << std::endl;
-    }
+
+std::ostream &operator <<(std::ostream &stream, const Node &node)
+{
+    stream << node.x << " " << node.y;
+    return stream;
 }
