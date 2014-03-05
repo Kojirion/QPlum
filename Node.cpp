@@ -64,3 +64,10 @@ std::ostream &operator <<(std::ostream &stream, const Node &node)
     stream << node.position().x() << " " << node.position().y();
     return stream;
 }
+
+
+QDataStream &operator<<(QDataStream &stream, const Node &node)
+{
+    stream << node.position() << node.fixity.x << node.fixity.y << node.fixity.z << node.load.x << node.load.y << node.load.z;
+    return stream;
+}

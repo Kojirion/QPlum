@@ -2,6 +2,7 @@
 #include <QGraphicsScene>
 #include <QLineF>
 #include "NodeModel.hpp"
+#include <QDebug>
 
 ElementModel::ElementModel(const NodeModel &nodeModel, QGraphicsScene &scene, QObject *parent) :
     QAbstractTableModel(parent),
@@ -32,9 +33,9 @@ QVariant ElementModel::data(const QModelIndex &index, int role) const
         case 0:
             return toReturn.type;
         case 1:
-            return QVariant(toReturn.nodeIndex_1());
+            return toReturn.nodeIndex_1() + 1;
         case 2:
-            return QVariant(toReturn.nodeIndex_2());
+            return toReturn.nodeIndex_2() + 1;
         case 3:
             return QVariant(toReturn.youngsModulus);
         case 4:
@@ -129,8 +130,17 @@ void ElementModel::saveTo(std::ofstream &stream) const
 Element &ElementModel::appendRow(unsigned int node_1, unsigned int node_2, const QLineF &line)
 {
     emit beginInsertRows(QModelIndex(), elements.size(), elements.size());
-    elements.append(Element(m_nodeModel.itemAt(node_1-1), m_nodeModel.itemAt(node_2-1), line));
+    qDebug() << node_1 << " " << node_2;
+    elements.append(Element(m_nodeModel.itemAt(node_1), m_nodeModel.itemAt(node_2), line));
     m_scene.addItem(elements.back().getItem());
     emit endInsertRows();
     return elements.back();
+}
+
+
+QDataStream &operator<<(QDataStream &stream, const ElementModel &elementModel)
+{
+    for (const auto& element : elementModel.elements)
+        stream << element;
+    return stream;
 }

@@ -6,6 +6,7 @@ class QGraphicsLineItem;
 class QGraphicsItem;
 class QLineF;
 class Node;
+class QDataStream;
 
 class Element {
 public:
@@ -29,8 +30,10 @@ private:
     const Node* node_2;
 
     friend std::ostream& operator<<(std::ostream& stream, const Element& element);
+    friend QDataStream& operator<<(QDataStream& stream, const Element& element);
 };
 
 std::ostream& operator<<(std::ostream& stream, const Element& element);
+QDataStream& operator<<(QDataStream& stream, const Element& element);
 
 #endif // ELEMENT_HPP

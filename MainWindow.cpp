@@ -145,7 +145,7 @@ void MainWindow::save()
     file.open(QIODevice::WriteOnly);
     QDataStream out(&file);
     out.setVersion(QDataStream::Qt_5_0);
-    out << nodesModel << elementsModel;
+    out << *nodesModel << *elementsModel;
 }
 
 unsigned int MainWindow::getGrabberIndex(const QPointF& point)

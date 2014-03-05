@@ -30,6 +30,7 @@ public slots:
     void tempElement(const QPointF &point);
     void newElement(const QPointF &point_2);
     void mouseMoved(const QPointF& point);
+    void save();
     
 private:
     enum class State {

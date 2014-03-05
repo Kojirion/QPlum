@@ -7,6 +7,7 @@
 
 class QGraphicsScene;
 class QPointF;
+class QDataStream;
 
 class NodeModel : public QAbstractTableModel
 {
@@ -38,7 +39,10 @@ public slots:
 private:
     QGraphicsScene& m_scene;
     QList<Node*> nodes;
-    
+
+    friend QDataStream& operator<<(QDataStream& stream, const NodeModel& nodeModel);
 };
+
+QDataStream& operator<<(QDataStream& stream, const NodeModel& nodeModel);
 
 #endif // NODEMODEL_HPP
