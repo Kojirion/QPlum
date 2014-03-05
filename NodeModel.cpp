@@ -201,6 +201,14 @@ const Node &NodeModel::itemAt(unsigned int index) const
 
 void NodeModel::attachEdge(unsigned int node_1, unsigned int node_2, Element &element)
 {
-    nodes[node_1-1]->addEdge(element);
-    nodes[node_2-1]->addEdge(element);
+    nodes[node_1]->addEdge(element);
+    nodes[node_2]->addEdge(element);
+}
+
+
+QDataStream &operator<<(QDataStream &stream, const NodeModel &nodeModel)
+{
+    for (const auto& node : nodeModel.nodes)
+        stream << node;
+    return stream;
 }
