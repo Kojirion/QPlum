@@ -1,32 +1,18 @@
-#ifndef NODESMODEL_HPP
-#define NODESMODEL_HPP
+#ifndef NODEMODEL_HPP
+#define NODEMODEL_HPP
 #include <QAbstractTableModel>
 #include <QList>
 #include <fstream>
-#include <boost/optional.hpp>
+#include "Node.hpp"
 
-struct OptionalVector {
-    boost::optional<double> x, y, z;
-};
+class QGraphicsScene;
+class QPointF;
 
-struct Vector {
-    double x,y,z;
-};
-
-struct Node {
-    double x,y;
-
-    OptionalVector fixity;
-    Vector load;
-};
-
-std::ostream& operator<<(std::ostream& stream, const Node& node);
-
-class NodesModel : public QAbstractTableModel
+class NodeModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    explicit NodesModel(QObject *parent = 0);
+    explicit NodeModel(QGraphicsScene& scene, QObject *parent = 0);
 
     int rowCount(const QModelIndex & parent = QModelIndex()) const;
     int columnCount(const QModelIndex & parent = QModelIndex()) const;
@@ -38,16 +24,21 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const;
     void saveTo(std::ofstream& stream) const;
     void saveFixesLoadsTo(std::ofstream& stream) const;
+    void makeMovable();
+    void makeImmovable();
+    const Node& itemAt(unsigned int index) const;
+    void attachEdge(unsigned int node_1, unsigned int node_2, Element& element);
 
 
 signals:
     
 public slots:
-    void appendRow();
+    void appendRow(const QPointF& point = {0,0});
 
 private:
-    QList<Node> nodes;
+    QGraphicsScene& m_scene;
+    QList<Node*> nodes;
     
 };
 
-#endif // NODESMODEL_HPP
+#endif // NODEMODEL_HPP

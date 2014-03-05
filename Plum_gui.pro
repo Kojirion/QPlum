@@ -12,15 +12,22 @@ TARGET = Plum_gui
 TEMPLATE = app
 
 CONFIG += c++11
+QMAKE_CXXFLAGS += -gdwarf-3
 
 
 SOURCES += main.cpp\
         MainWindow.cpp \
-    NodesModel.cpp \
-    ElementsModel.cpp
+    NodeModel.cpp \
+    ElementModel.cpp \
+    Node.cpp \
+    Element.cpp \
+    Scene.cpp
 
 HEADERS  += MainWindow.hpp \
-    NodesModel.hpp \
-    ElementsModel.hpp
+    NodeModel.hpp \
+    ElementModel.hpp \
+    Node.hpp \
+    Element.hpp \
+    Scene.hpp
 
 FORMS    += mainwindow.ui

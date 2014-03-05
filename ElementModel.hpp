@@ -1,21 +1,19 @@
-#ifndef ELEMENTSMODEL_HPP
-#define ELEMENTSMODEL_HPP
+#ifndef ELEMENTMODEL_HPP
+#define ELEMENTMODEL_HPP
 
 #include <QAbstractTableModel>
 #include <fstream>
+#include "Element.hpp"
 
-struct Element {
-    unsigned int type, node_1, node_2;
-    double youngsModulus, area, area_2;   
-};
+class QGraphicsScene;
+class QLineF;
+class NodeModel;
 
-std::ostream& operator<<(std::ostream& stream, const Element& element);
-
-class ElementsModel : public QAbstractTableModel
+class ElementModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    explicit ElementsModel(QObject *parent = 0);
+    explicit ElementModel(const NodeModel& nodeModel, QGraphicsScene& scene, QObject *parent = 0);
 
     int rowCount(const QModelIndex & parent = QModelIndex()) const;
     int columnCount(const QModelIndex & parent = QModelIndex()) const;
@@ -29,11 +27,13 @@ public:
 signals:
     
 public slots:
-    void appendRow();
+    Element& appendRow(unsigned int node_1, unsigned int node_2, const QLineF& line);
 
 private:
+    const NodeModel& m_nodeModel;
+    QGraphicsScene& m_scene;
     QList<Element> elements;
     
 };
 
-#endif // ELEMENTSMODEL_HPP
+#endif // ELEMENTMODEL_HPP

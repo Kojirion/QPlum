@@ -1,21 +1,26 @@
-#include "ElementsModel.hpp"
+#include "ElementModel.hpp"
+#include <QGraphicsScene>
+#include <QLineF>
+#include "NodeModel.hpp"
 
-ElementsModel::ElementsModel(QObject *parent) :
-    QAbstractTableModel(parent)
+ElementModel::ElementModel(const NodeModel &nodeModel, QGraphicsScene &scene, QObject *parent) :
+    QAbstractTableModel(parent),
+    m_nodeModel(nodeModel),
+    m_scene(scene)
 {
 }
 
-int ElementsModel::rowCount(const QModelIndex &parent) const
+int ElementModel::rowCount(const QModelIndex &parent) const
 {
     return elements.size();
 }
 
-int ElementsModel::columnCount(const QModelIndex &parent) const
+int ElementModel::columnCount(const QModelIndex &parent) const
 {
     return 6;
 }
 
-QVariant ElementsModel::data(const QModelIndex &index, int role) const
+QVariant ElementModel::data(const QModelIndex &index, int role) const
 {
     if ((!index.isValid()) ||(index.row() >= elements.size()))
         return QVariant();
@@ -27,9 +32,9 @@ QVariant ElementsModel::data(const QModelIndex &index, int role) const
         case 0:
             return toReturn.type;
         case 1:
-            return QVariant(toReturn.node_1);
+            return QVariant(toReturn.nodeIndex_1());
         case 2:
-            return QVariant(toReturn.node_2);
+            return QVariant(toReturn.nodeIndex_2());
         case 3:
             return QVariant(toReturn.youngsModulus);
         case 4:
@@ -44,7 +49,7 @@ QVariant ElementsModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-QVariant ElementsModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant ElementModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (role == Qt::DisplayRole){
         if (orientation == Qt::Horizontal){
@@ -72,7 +77,7 @@ QVariant ElementsModel::headerData(int section, Qt::Orientation orientation, int
     return QVariant();
 }
 
-bool ElementsModel::setData(const QModelIndex &index, const QVariant &value, int role)
+bool ElementModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if (role == Qt::EditRole){
         if ((!index.isValid()) ||(index.row() >= elements.size()))
@@ -85,10 +90,10 @@ bool ElementsModel::setData(const QModelIndex &index, const QVariant &value, int
             toSet.type = value.toInt();
             break;
         case 1:
-            toSet.node_1 = value.toInt();
+            toSet.setNode_1(m_nodeModel.itemAt(value.toInt()-1));
             break;
         case 2:
-            toSet.node_2 = value.toInt();
+            toSet.setNode_2(m_nodeModel.itemAt(value.toInt()-1));
             break;
         case 3:
             toSet.youngsModulus = value.toReal();
@@ -110,31 +115,22 @@ bool ElementsModel::setData(const QModelIndex &index, const QVariant &value, int
     return false;
 }
 
-Qt::ItemFlags ElementsModel::flags(const QModelIndex &index) const
+Qt::ItemFlags ElementModel::flags(const QModelIndex &index) const
 {
     return Qt::ItemIsEnabled | Qt::ItemIsEditable | Qt::ItemIsSelectable;
 }
 
-void ElementsModel::saveTo(std::ofstream &stream) const
+void ElementModel::saveTo(std::ofstream &stream) const
 {
     for (int i=0; i<elements.size(); ++i)
-        stream << "E " << elements[i] << std::endl;
+        stream << "E " << (i + 1) << " " << elements[i] << std::endl;
 }
 
-void ElementsModel::appendRow()
+Element &ElementModel::appendRow(unsigned int node_1, unsigned int node_2, const QLineF &line)
 {
     emit beginInsertRows(QModelIndex(), elements.size(), elements.size());
-    elements.append(Element{1, 0, 0, 2E-8, 0.01, 3E-4});
+    elements.append(Element(m_nodeModel.itemAt(node_1-1), m_nodeModel.itemAt(node_2-1), line));
+    m_scene.addItem(elements.back().getItem());
     emit endInsertRows();
-}
-
-
-std::ostream &operator <<(std::ostream &stream, const Element &element)
-{
-    stream << element.node_1 << " "
-           << element.node_2 << " "
-           << element.youngsModulus << " "
-           << element.area << " "
-           << element.area_2;
-    return stream;
+    return elements.back();
 }
