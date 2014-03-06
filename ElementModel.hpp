@@ -33,7 +33,13 @@ private:
     const NodeModel& m_nodeModel;
     QGraphicsScene& m_scene;
     QList<Element> elements;
+
+    friend QDataStream& operator<<(QDataStream& stream, const ElementModel& elementModel);
+    friend QDataStream& operator>>(QDataStream& stream, ElementModel& elementModel);
     
 };
+
+QDataStream& operator<<(QDataStream& stream, const ElementModel& elementModel);
+QDataStream& operator>>(QDataStream& stream, ElementModel& elementModel);
 
 #endif // ELEMENTMODEL_HPP

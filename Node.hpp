@@ -9,10 +9,19 @@
 //class QGraphicsItem;
 //class QGraphicsEllipseItem;
 class Element;
+class QDataStream;
+
+typedef boost::optional<double> OptionalDouble;
+
+QDataStream& operator<<(QDataStream& stream, const OptionalDouble& number);
+QDataStream& operator>>(QDataStream& stream, OptionalDouble& number);
 
 struct OptionalVector {
-    boost::optional<double> x, y, z;
+    OptionalDouble x, y, z;
 };
+
+//QDataStream& operator<<(QDataStream& stream, const OptionalVector& vector);
+//QDataStream& operator>>(QDataStream& stream, OptionalVector& vector);
 
 struct Vector {
     double x,y,z;
@@ -36,8 +45,11 @@ protected:
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 private:
     QList<Element*> m_edges;
+
+    friend QDataStream& operator<<(QDataStream& stream, const Node& node);
 };
 
 std::ostream& operator<<(std::ostream& stream, const Node& node);
+QDataStream& operator<<(QDataStream& stream, const Node& node);
 
 #endif // NODE_HPP

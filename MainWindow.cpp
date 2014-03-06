@@ -10,6 +10,7 @@
 #include <QProcess>
 #include <QGraphicsLineItem>
 #include <QTableView>
+#include <QFileDialog>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -49,6 +50,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(m_scene, SIGNAL(mouseMoved(QPointF)), this, SLOT(mouseMoved(QPointF)));
 
     connect(ui->elementListButton, SIGNAL(clicked()), m_elementView, SLOT(show()));
+    connect(ui->actionSave, SIGNAL(triggered()), this, SLOT(save()));
+    connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(load()));
 }
 
 MainWindow::~MainWindow()
@@ -136,6 +139,26 @@ void MainWindow::mouseMoved(const QPointF &point)
     m_tempElement->setLine(QLineF(m_tempElement->line().p1(), point));
 }
 
+void MainWindow::save()
+{
+    auto filename = QFileDialog::getSaveFileName();
+    QFile file(filename);
+    file.open(QIODevice::WriteOnly);
+    QDataStream out(&file);
+    out.setVersion(QDataStream::Qt_5_2);
+    out << *nodesModel << *elementsModel;
+}
+
+void MainWindow::load()
+{
+    auto filename = QFileDialog::getOpenFileName();
+    QFile file(filename);
+    file.open(QIODevice::ReadOnly);
+    QDataStream in(&file);
+    in.setVersion(QDataStream::Qt_5_2);
+    in >> *nodesModel >> *elementsModel;
+}
+
 unsigned int MainWindow::getGrabberIndex(const QPointF& point)
 {
     auto item = m_scene->itemAt(point, QTransform());
@@ -146,5 +169,5 @@ unsigned int MainWindow::getGrabberIndex(const QPointF& point)
     }
 
     nodesModel->appendRow(point);
-    return nodesModel->rowCount();
+    return nodesModel->rowCount() - 1;
 }

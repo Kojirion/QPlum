@@ -201,6 +201,48 @@ const Node &NodeModel::itemAt(unsigned int index) const
 
 void NodeModel::attachEdge(unsigned int node_1, unsigned int node_2, Element &element)
 {
-    nodes[node_1-1]->addEdge(element);
-    nodes[node_2-1]->addEdge(element);
+    nodes[node_1]->addEdge(element);
+    nodes[node_2]->addEdge(element);
+}
+
+
+QDataStream &operator<<(QDataStream &stream, const NodeModel &nodeModel)
+{
+    stream << quint32(nodeModel.nodes.size());
+    for (const auto& node : nodeModel.nodes)
+        operator<<(stream, *node);
+    return stream;
+}
+
+
+QDataStream &operator>>(QDataStream &stream, NodeModel &nodeModel)
+{
+    auto& list = nodeModel.nodes;
+    list.clear();
+    quint32 c;
+    stream >> c;
+    list.reserve(c);
+    nodeModel.beginInsertRows(QModelIndex(), 0, c-1);
+    for(quint32 i = 0; i < c; ++i)
+    {
+        QPointF position;
+        OptionalVector fixity;
+        Vector load;
+        stream >> position >> fixity.x >> fixity.y >> fixity.z >> load.x >> load.y >> load.z;
+
+        Node* node = new Node(i);
+
+        node->setX(position.x());
+        node->setY(position.y());
+        node->fixity = fixity;
+        node->load = load;
+
+        list.append(node);
+        nodeModel.m_scene.addItem(node);
+
+        if (stream.atEnd())
+            break;
+    }
+    nodeModel.endInsertRows();
+    return stream;
 }

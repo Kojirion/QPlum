@@ -2,6 +2,8 @@
 #include <QGraphicsLineItem>
 #include "Node.hpp"
 #include <QDebug>
+#include <QList>
+#include <QDataStream>
 
 
 Element::Element(const Node& node_1, const Node& node_2, const QLineF &line):
@@ -56,5 +58,15 @@ std::ostream &operator <<(std::ostream &stream, const Element &element)
            << element.youngsModulus << " "
            << element.area << " "
            << element.area_2;
+    return stream;
+}
+
+
+QDataStream &operator<<(QDataStream &stream, const Element &element)
+{
+    stream << static_cast<quint16>(element.type)
+           << static_cast<quint64>(element.node_1->getIndex())
+           << static_cast<quint64>(element.node_2->getIndex())
+           <<element.youngsModulus << element.area << element.area_2;
     return stream;
 }
