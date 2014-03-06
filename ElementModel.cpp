@@ -90,13 +90,30 @@ bool ElementModel::setData(const QModelIndex &index, const QVariant &value, int 
         case 0:
             toSet->type = value.toInt();
             break;
-        case 1:
-            //TODO: must also disconnect and connect new edge at the nodes in question
-            toSet->setNode_1(m_nodeModel.itemAt(value.toInt()-1));
+        case 1:{
+            auto index = value.toInt()-1;
+            if (index >= m_nodeModel.rowCount())
+                break;
+            auto& oldNode = m_nodeModel.itemAt(toSet->nodeIndex_1());
+            oldNode.removeEdge(*toSet);
+            auto& newNode = m_nodeModel.itemAt(index);
+            toSet->setNode_1(newNode);
+            newNode.addEdge(*toSet);
+            toSet->adjust();
             break;
-        case 2:
-            toSet->setNode_2(m_nodeModel.itemAt(value.toInt()-1));
+        }
+        case 2:{
+            auto index = value.toInt()-1;
+            if (index >= m_nodeModel.rowCount())
+                break;
+            auto& oldNode = m_nodeModel.itemAt(toSet->nodeIndex_2());
+            oldNode.removeEdge(*toSet);
+            auto& newNode = m_nodeModel.itemAt(index);
+            toSet->setNode_2(newNode);
+            newNode.addEdge(*toSet);
+            toSet->adjust();
             break;
+        }
         case 3:
             toSet->youngsModulus = value.toReal();
             break;

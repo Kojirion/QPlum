@@ -19,6 +19,11 @@ void Node::addEdge(Element &element)
     m_edges.append(&element);
 }
 
+void Node::removeEdge(Element &element)
+{
+    m_edges.removeOne(&element);
+}
+
 unsigned int Node::getIndex() const
 {
     return data(0).toUInt();

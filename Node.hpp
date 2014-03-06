@@ -35,6 +35,7 @@ public:
     Vector load;
 
     void addEdge(Element &element);
+    void removeEdge(Element& element);
     unsigned int getIndex() const;
 
     QPointF position() const;
