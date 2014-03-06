@@ -11,6 +11,7 @@
 #include <QGraphicsLineItem>
 #include <QTableView>
 #include <QFileDialog>
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),

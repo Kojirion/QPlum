@@ -28,6 +28,7 @@ public:
     void makeMovable();
     void makeImmovable();
     const Node& itemAt(unsigned int index) const;
+    Node& itemAt(unsigned int index);
     void attachEdge(unsigned int node_1, unsigned int node_2, Element& element);
 
 

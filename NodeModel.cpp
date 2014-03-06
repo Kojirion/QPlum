@@ -199,6 +199,11 @@ const Node &NodeModel::itemAt(unsigned int index) const
     return *nodes[index];
 }
 
+Node &NodeModel::itemAt(unsigned int index)
+{
+    return *nodes[index];
+}
+
 void NodeModel::attachEdge(unsigned int node_1, unsigned int node_2, Element &element)
 {
     nodes[node_1]->addEdge(element);

@@ -13,7 +13,7 @@ class ElementModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    explicit ElementModel(const NodeModel& nodeModel, QGraphicsScene& scene, QObject *parent = 0);
+    explicit ElementModel(NodeModel& nodeModel, QGraphicsScene& scene, QObject *parent = 0);
 
     int rowCount(const QModelIndex & parent = QModelIndex()) const;
     int columnCount(const QModelIndex & parent = QModelIndex()) const;
@@ -30,9 +30,9 @@ public slots:
     Element& appendRow(unsigned int node_1, unsigned int node_2, const QLineF& line);
 
 private:
-    const NodeModel& m_nodeModel;
+    NodeModel& m_nodeModel;
     QGraphicsScene& m_scene;
-    QList<Element> elements;
+    QList<Element*> elements;
 
     friend QDataStream& operator<<(QDataStream& stream, const ElementModel& elementModel);
     friend QDataStream& operator>>(QDataStream& stream, ElementModel& elementModel);

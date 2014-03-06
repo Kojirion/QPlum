@@ -14,8 +14,7 @@ Element::Element(const Node& node_1, const Node& node_2, const QLineF &line):
     area_2(3E-4),
     m_sprite(new QGraphicsLineItem(line))
 {
-    //m_sprite->grabMouse();
-    //m_sprite->setLine(point.x(), point.y());
+
 }
 
 unsigned int Element::nodeIndex_1() const
@@ -41,7 +40,6 @@ void Element::setNode_2(const Node &node)
 void Element::adjust()
 {
     QLineF line(node_1->position(), node_2->position());
-    qDebug() << line;
     m_sprite->setLine(line);
 }
 
