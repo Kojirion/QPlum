@@ -109,6 +109,7 @@ void MainWindow::click_1()
 {
     nodesModel->makeImmovable();
     m_state = State::Click_1;
+    statusBar()->showMessage("First node of element: click on existing node or on empty space to insert one");
 }
 
 void MainWindow::tempElement(const QPointF& point)
@@ -117,6 +118,7 @@ void MainWindow::tempElement(const QPointF& point)
     m_tempElement->setLine(QLineF(point, point));
     m_tempElement->setVisible(true);
     m_state = State::Click_2;
+    statusBar()->showMessage("Second node of element: click on existing node or on empty space to insert one");
     m_node_1 = getGrabberIndex(point);
 }
 
