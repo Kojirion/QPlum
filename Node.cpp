@@ -71,3 +71,36 @@ QDataStream &operator<<(QDataStream &stream, const Node &node)
     stream << node.position() << node.fixity.x << node.fixity.y << node.fixity.z << node.load.x << node.load.y << node.load.z;
     return stream;
 }
+
+
+//QDataStream &operator<<(QDataStream &stream, const OptionalVector &vector)
+//{
+
+//}
+
+
+//QDataStream &operator>>(QDataStream &stream, OptionalVector &vector)
+//{
+
+//}
+
+
+QDataStream &operator<<(QDataStream &stream, const OptionalDouble &number)
+{
+    if (number)
+        stream << true << *number;
+    else stream << false << 0.;
+    return stream;
+}
+
+
+QDataStream &operator>>(QDataStream &stream, OptionalDouble &number)
+{
+    bool on;
+    double value;
+    stream >> on >> value;
+    if (on)
+        number = value;
+    else number.reset();
+    return stream;
+}

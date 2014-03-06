@@ -51,6 +51,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->elementListButton, SIGNAL(clicked()), m_elementView, SLOT(show()));
     connect(ui->actionSave, SIGNAL(triggered()), this, SLOT(save()));
+    connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(load()));
 }
 
 MainWindow::~MainWindow()
@@ -144,8 +145,18 @@ void MainWindow::save()
     QFile file(filename);
     file.open(QIODevice::WriteOnly);
     QDataStream out(&file);
-    out.setVersion(QDataStream::Qt_5_0);
+    out.setVersion(QDataStream::Qt_5_2);
     out << *nodesModel << *elementsModel;
+}
+
+void MainWindow::load()
+{
+    auto filename = QFileDialog::getOpenFileName();
+    QFile file(filename);
+    file.open(QIODevice::ReadOnly);
+    QDataStream in(&file);
+    in.setVersion(QDataStream::Qt_5_2);
+    in >> *nodesModel >> *elementsModel;
 }
 
 unsigned int MainWindow::getGrabberIndex(const QPointF& point)

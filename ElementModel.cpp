@@ -91,6 +91,7 @@ bool ElementModel::setData(const QModelIndex &index, const QVariant &value, int 
             toSet.type = value.toInt();
             break;
         case 1:
+            //TODO: must also disconnect and connect new edge at the nodes in question
             toSet.setNode_1(m_nodeModel.itemAt(value.toInt()-1));
             break;
         case 2:
@@ -140,7 +141,42 @@ Element &ElementModel::appendRow(unsigned int node_1, unsigned int node_2, const
 
 QDataStream &operator<<(QDataStream &stream, const ElementModel &elementModel)
 {
-    for (const auto& element : elementModel.elements)
-        stream << element;
+    stream << elementModel.elements;
+    return stream;
+}
+
+
+QDataStream &operator>>(QDataStream &stream, ElementModel &elementModel)
+{
+    auto& list = elementModel.elements;
+    list.clear();
+    quint32 c;
+    stream >> c;
+    list.reserve(c);
+    elementModel.beginInsertRows(QModelIndex(), 0, c-1);
+    for(quint32 i = 0; i < c; ++i)
+    {
+        quint16 type;
+        quint64 nodeIndex_1, nodeIndex_2;
+        double youngsModulus, area, area_2;
+
+        stream >> type >> nodeIndex_1 >> nodeIndex_2 >> youngsModulus >> area >> area_2;
+
+        auto& nodeModel = elementModel.m_nodeModel;
+        auto& node_1 = nodeModel.itemAt(nodeIndex_1);
+        auto& node_2 = nodeModel.itemAt(nodeIndex_2);
+        QLineF line(node_1.position(), node_2.position());
+        Element element(node_1, node_2, line);
+        element.type = type;
+        element.youngsModulus = youngsModulus;
+        element.area = area;
+        element.area_2 = area_2;
+
+        list.append(element);
+        if (stream.atEnd())
+            break;
+    }
+    elementModel.endInsertRows();
+    //TODO: here we should reattach all elements to nodes
     return stream;
 }

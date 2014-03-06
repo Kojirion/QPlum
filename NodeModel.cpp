@@ -208,7 +208,39 @@ void NodeModel::attachEdge(unsigned int node_1, unsigned int node_2, Element &el
 
 QDataStream &operator<<(QDataStream &stream, const NodeModel &nodeModel)
 {
+    stream << quint32(nodeModel.nodes.size());
     for (const auto& node : nodeModel.nodes)
-        stream << node;
+        operator<<(stream, *node);
+    return stream;
+}
+
+
+QDataStream &operator>>(QDataStream &stream, NodeModel &nodeModel)
+{
+    auto& list = nodeModel.nodes;
+    list.clear();
+    quint32 c;
+    stream >> c;
+    list.reserve(c);
+    nodeModel.beginInsertRows(QModelIndex(), 0, c-1);
+    for(quint32 i = 0; i < c; ++i)
+    {
+        QPointF position;
+        OptionalVector fixity;
+        Vector load;
+        stream >> position >> fixity.x >> fixity.y >> fixity.z >> load.x >> load.y >> load.z;
+
+        Node* node = new Node(i);
+
+        node->setX(position.x());
+        node->setY(position.y());
+        node->fixity = fixity;
+        node->load = load;
+
+        list.append(node);
+        if (stream.atEnd())
+            break;
+    }
+    nodeModel.endInsertRows();
     return stream;
 }

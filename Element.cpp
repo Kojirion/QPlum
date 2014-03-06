@@ -2,6 +2,8 @@
 #include <QGraphicsLineItem>
 #include "Node.hpp"
 #include <QDebug>
+#include <QList>
+#include <QDataStream>
 
 
 Element::Element(const Node& node_1, const Node& node_2, const QLineF &line):

@@ -41,8 +41,10 @@ private:
     QList<Node*> nodes;
 
     friend QDataStream& operator<<(QDataStream& stream, const NodeModel& nodeModel);
+    friend QDataStream& operator>>(QDataStream& stream, NodeModel& nodeModel);
 };
 
 QDataStream& operator<<(QDataStream& stream, const NodeModel& nodeModel);
+QDataStream& operator>>(QDataStream& stream, NodeModel& nodeModel);
 
 #endif // NODEMODEL_HPP
