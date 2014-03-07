@@ -10,9 +10,17 @@ class QDataStream;
 
 class Element {
 public:
+
+    enum class Type {
+        Frame = 1,
+        Truss = 2,
+        ContactBeam_1 = 4,
+        ContactBeam_2 =3
+    };
+
     Element(const Node& node_1, const Node& node_2, const QLineF& line);
 
-    unsigned int type;
+    Type type;
     double youngsModulus, area, area_2;
 
     unsigned int nodeIndex_1() const;

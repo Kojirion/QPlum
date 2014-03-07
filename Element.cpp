@@ -7,7 +7,7 @@
 
 
 Element::Element(const Node& node_1, const Node& node_2, const QLineF &line):
-    type(1),
+    type(Type::Frame),
     node_1(&node_1), node_2(&node_2),
     youngsModulus(2E-8),
     area(0.01),
@@ -50,7 +50,7 @@ QGraphicsItem *Element::getItem()
 
 std::ostream &operator <<(std::ostream &stream, const Element &element)
 {
-    stream << element.type << " "
+    stream << static_cast<int>(element.type) << " "
            << element.node_1->getIndex() << " "
            << element.node_2->getIndex() << " "
            << element.youngsModulus << " "

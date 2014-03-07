@@ -31,7 +31,7 @@ QVariant ElementModel::data(const QModelIndex &index, int role) const
 
         switch (index.column()) {
         case 0:
-            return toReturn->type;
+            return static_cast<int>(toReturn->type);
         case 1:
             return toReturn->nodeIndex_1() + 1;
         case 2:
@@ -88,7 +88,7 @@ bool ElementModel::setData(const QModelIndex &index, const QVariant &value, int 
 
         switch (index.column()) {
         case 0:
-            toSet->type = value.toInt();
+            toSet->type = static_cast<Element::Type>(value.toInt());
             break;
         case 1:{
             auto index = value.toInt()-1;
@@ -185,7 +185,7 @@ QDataStream &operator>>(QDataStream &stream, ElementModel &elementModel)
         auto& node_2 = nodeModel.itemAt(nodeIndex_2);
         QLineF line(node_1.position(), node_2.position());
         Element* element = new Element(node_1, node_2, line);
-        element->type = type;
+        element->type = static_cast<Element::Type>(type);
         element->youngsModulus = youngsModulus;
         element->area = area;
         element->area_2 = area_2;
